@@ -47,11 +47,15 @@ function M.count(tab)
 end
 
 function M.warn(msg)
-  vim.notify(msg, vim.log.levels.WARN, { title = "Trouble" })
+  if config.options.debug then
+    vim.notify(msg, vim.log.levels.WARN, { title = "Trouble" })
+  end
 end
 
 function M.error(msg)
-  vim.notify(msg, vim.log.levels.ERROR, { title = "Trouble" })
+  if config.options.debug then
+    vim.notify(msg, vim.log.levels.ERROR, { title = "Trouble" })
+  end
 end
 
 function M.debug(msg)
@@ -121,17 +125,17 @@ function M.process_item(item, bufnr)
   local filename = vim.api.nvim_buf_get_name(bufnr)
   local uri = vim.uri_from_bufnr(bufnr)
   local range = item.range
-    or item.targetSelectionRange
-    or {
-      ["start"] = {
-        character = item.col,
-        line = item.lnum,
-      },
-      ["end"] = {
-        character = item.end_col,
-        line = item.end_lnum,
-      },
-    }
+      or item.targetSelectionRange
+      or {
+        ["start"] = {
+          character = item.col,
+          line = item.lnum,
+        },
+        ["end"] = {
+          character = item.end_col,
+          line = item.end_lnum,
+        },
+      }
   local start = range["start"]
   local finish = range["end"]
 
